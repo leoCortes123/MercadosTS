@@ -2,7 +2,7 @@ import { FC } from "react"
 import { Card } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import Rating from "./Rating"
-import { ProductDTO } from "../DTO/ProductsDTO"
+import { ProductDTO } from "../DTO/ProductDTO"
 import React from "react"
 
 interface ProductProps {

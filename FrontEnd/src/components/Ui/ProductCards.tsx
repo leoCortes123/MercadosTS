@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Row, Col } from "react-bootstrap"
 import Product from "../Product"
-import { ProductDTO } from "../../DTO/ProductsDTO" // Importa tu DTO
+import { ProductDTO } from "../../DTO/ProductDTO" // Importa tu DTO
 
 interface ProductListProps {
   products: ProductDTO[]

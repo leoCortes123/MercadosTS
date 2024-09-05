@@ -1,7 +1,11 @@
-import { ProductDTO } from "./ProductsDTO"
+import { IProductDTO } from "./ProductDTO"
 
-export interface CartDTO {
-  CartList: { Product: ProductDTO; qty: number }[]
-  shippingAddress: string[]
+export interface ICartDTO {
+  cartItems: IProductDTO[]
+  itemsPrice: number
+  shippingAddress: string
   paymentMethod: string
+  shippingPrice: number
+  taxPrice: number
+  totalPrice: number
 }

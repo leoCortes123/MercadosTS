@@ -1,4 +1,4 @@
-export interface ProductDTO {
+export interface IProductDTO {
   _id: string
   userId: string
   name: string
@@ -10,6 +10,7 @@ export interface ProductDTO {
   numReviews: number
   price: number
   countInStock: number
+  qty: number
   createdAt?: Date
   updatedAt?: Date
 }

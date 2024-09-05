@@ -1,40 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { updateCart } from "../utils/cartUtils"
-import { CartDTO } from "../DTO/CartDTO"
-import { json } from "stream/consumers"
+import { ICartDTO } from "../DTO/CartDTO"
+import { IProductDTO } from "../DTO/ProductDTO"
 
-const initialState: CartDTO = localStorage.getItem("cart")
+// TODO: create object CartDTO object to use instead the interface
+const initialState: ICartDTO = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart") as string)
-  : ({} as CartDTO)
+  : ({} as ICartDTO)
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action) => {
-      // NOTE: we don't need user, rating, numReviews or reviews
-      // in the cart
-      const { user, rating, numReviews, reviews, ...item } = action.payload
+    addToCart: (state, action: PayloadAction<IProductDTO>) => {
+      const product = action.payload
+      const index = state.cartItems.findIndex((item) => item._id === product._id)
 
-      const existItem = state.CartList.find((x) => x.Product._id === item._id)
-
-      if (existItem) {
-        state.cartItems = state.cartItems.map((x) => (x._id === existItem._id ? item : x))
+      if (index !== -1) {
+        state.cartItems[index] = product
       } else {
-        state.cartItems = [...state.cartItems, item]
+        state.cartItems.push(product)
       }
-
-      return updateCart(state, item)
     },
-    removeFromCart: (state, action) => {
+    removeFromCart: (state, action: PayloadAction<string>) => {
       state.cartItems = state.cartItems.filter((x) => x._id !== action.payload)
       return updateCart(state)
     },
-    saveShippingAddress: (state, action) => {
+    saveShippingAddress: (state, action: PayloadAction<string>) => {
       state.shippingAddress = action.payload
       localStorage.setItem("cart", JSON.stringify(state))
     },
-    savePaymentMethod: (state, action) => {
+    savePaymentMethod: (state, action: PayloadAction<string>) => {
       state.paymentMethod = action.payload
       localStorage.setItem("cart", JSON.stringify(state))
     },
@@ -42,9 +38,9 @@ const cartSlice = createSlice({
       state.cartItems = []
       localStorage.setItem("cart", JSON.stringify(state))
     },
-    // NOTE: here we need to reset state for when a user logs out so the next
-    // user doesn't inherit the previous users cart and shipping
-    resetCart: (state) => (state = initialState),
+    resetCart: (state) => {
+      return initialState
+    },
   },
 })
 
