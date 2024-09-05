@@ -4,22 +4,23 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from "react-bootstrap"
 import { FaTrash } from "react-icons/fa"
 import Message from "../components/Message"
 import { addToCart, removeFromCart } from "../slices/cartSlice"
-import { ICartDTO } from "../DTO/CartDTO"
+import { RootState } from "../store"
+import { IProductDTO } from "../DTO/ProductDTO"
 
 const CartScreen = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const cart = useSelector((state: ICartDTO) => state.cart)
+  const cart = useSelector((state: RootState) => state.cart)
   const { cartItems } = cart
 
   // NOTE: no need for an async function here as we are not awaiting the
   // resolution of a Promise
-  const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({ ...product, qty }))
+  const addToCartHandler = (product: IProductDTO) => {
+    dispatch(addToCart({ ...product }))
   }
 
-  const removeFromCartHandler = (id) => {
+  const removeFromCartHandler = (id: string) => {
     dispatch(removeFromCart(id))
   }
 
@@ -48,11 +49,7 @@ const CartScreen = () => {
                   </Col>
                   <Col md={2}>${item.price}</Col>
                   <Col md={2}>
-                    <Form.Control
-                      as="select"
-                      value={item.qty}
-                      onChange={(e) => addToCartHandler(item, Number(e.target.value))}
-                    >
+                    <Form.Control as="select" value={item.qty} onChange={(e) => addToCartHandler(item)}>
                       {[...Array(item.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
                           {x + 1}
